@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import mandiBack from "@/assets/mandi_back.jpg";
 import mandiBack2 from "@/assets/mandi_back2.jpg";
 
-type InputMode = "quarters" | "custom" | "manual";
+type InputMode = "custom" | "manual";
 type PieceType = "chest" | "leg";
 
 interface Quarter {
@@ -22,7 +22,7 @@ interface Assignment {
 }
 
 const Index = () => {
-  const [inputMode, setInputMode] = useState<InputMode>("quarters");
+  const [inputMode, setInputMode] = useState<InputMode>("custom");
   const [quarters, setQuarters] = useState<number>(2);
   const [customQuarters, setCustomQuarters] = useState<Quarter[]>([
     { id: 1, type: "chest" },
@@ -45,9 +45,7 @@ const Index = () => {
 
   // Get current piece counts based on mode
   const getCurrentPieceCounts = () => {
-    if (inputMode === "quarters") {
-      return calculatePiecesFromQuarters(quarters);
-    } else if (inputMode === "custom") {
+    if (inputMode === "custom") {
       const chest = customQuarters.filter((q) => q.type === "chest").length;
       const leg = customQuarters.filter((q) => q.type === "leg").length;
       return { chest, leg };
@@ -65,8 +63,13 @@ const Index = () => {
   const remainingPeople = people.filter((p) => !assignments.some((a) => a.person === p));
 
   // Handle quarters input change
-  const handleQuartersChange = (value: number) => {
-    const numQuarters = Math.max(0, value);
+  const handleQuartersChange = (value: string) => {
+    if (value === '') {
+      setQuarters(0);
+      setCustomQuarters([]);
+      return;
+    }
+    const numQuarters = Math.max(0, parseInt(value));
     setQuarters(numQuarters);
     
     // Update custom quarters array
@@ -149,7 +152,7 @@ const Index = () => {
 
   // Reset everything
   const resetAll = () => {
-    setInputMode("quarters");
+    setInputMode("custom");
     setQuarters(2);
     setCustomQuarters([
       { id: 1, type: "chest" },
@@ -204,14 +207,6 @@ const Index = () => {
             {/* Mode Tabs */}
             <div className="flex gap-2 mb-6 flex-wrap">
               <Button
-                variant={inputMode === "quarters" ? "default" : "outline"}
-                onClick={() => setInputMode("quarters")}
-                disabled={isSpinning}
-                className="flex-1 min-w-[120px]"
-              >
-                Quarters Mode
-              </Button>
-              <Button
                 variant={inputMode === "custom" ? "default" : "outline"}
                 onClick={() => setInputMode("custom")}
                 disabled={isSpinning}
@@ -229,37 +224,6 @@ const Index = () => {
               </Button>
             </div>
 
-            {/* Quarters Mode */}
-            {inputMode === "quarters" && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Number of Quarters
-                  </label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={quarters}
-                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 0)}
-                    disabled={isSpinning}
-                    className="max-w-xs"
-                  />
-                </div>
-                <div className="bg-muted/50 p-4 rounded-lg space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Formula:</strong> 2 Quarters (Half) = 1 Chest + 1 Leg
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Formula:</strong> 4 Quarters (Full) = 2 Chest + 2 Legs
-                  </p>
-                  <p className="text-lg font-semibold text-foreground">
-                    {quarters} Quarter{quarters !== 1 ? "s" : ""} = {totalChest} Chest + {totalLeg}{" "}
-                    Leg{totalLeg !== 1 ? "s" : ""}
-                  </p>
-                </div>
-              </div>
-            )}
-
             {/* Custom Quarters Mode */}
             {inputMode === "custom" && (
               <div className="space-y-4">
@@ -270,10 +234,11 @@ const Index = () => {
                   <Input
                     type="number"
                     min="0"
-                    value={customQuarters.length}
-                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 0)}
+                    value={customQuarters.length || ''}
+                    onChange={(e) => handleQuartersChange(e.target.value)}
                     disabled={isSpinning}
                     className="max-w-xs"
+                    placeholder="0"
                   />
                 </div>
                 <div>
