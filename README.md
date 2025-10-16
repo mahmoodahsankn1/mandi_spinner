@@ -62,7 +62,77 @@ This project is built with:
 
 ## How can I deploy this project?
 
+### Deploy with Lovable (Easiest)
+
 Simply open [Lovable](https://lovable.dev/projects/cddecc45-cbbf-4e7f-9e8a-9017aa2076d1) and click on Share -> Publish.
+
+### Deploy to GitHub Pages (Free)
+
+This application is configured to work with GitHub Pages out of the box.
+
+**Option 1: Automatic deployment with GitHub Actions (Recommended)**
+
+1. Go to your repository Settings → Pages
+2. Under "Build and deployment", select "GitHub Actions" as the source
+3. Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+4. Push to main branch - your site will automatically deploy!
+
+**Option 2: Manual deployment**
+
+1. Build locally: `npm run build`
+2. Go to Settings → Pages
+3. Select "Deploy from a branch"
+4. Choose `main` branch and `/dist` folder
+
+Your app will be available at: `https://[username].github.io/[repository-name]/`
 
 ## Can I connect a custom domain to my Lovable project?
 
