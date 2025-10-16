@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 43 51% 95%;
+    --foreground: 25 47% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 47% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 47% 20%;
+
+    /* Golden Saffron - Primary */
+    --primary: 43 74% 49%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Spiced Orange-Brown */
+    --secondary: 25 60% 47%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Deep Brown */
+    --accent: 25 47% 27%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 43 30% 85%;
+    --muted-foreground: 25 20% 40%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 43 30% 85%;
+    --input: 43 30% 90%;
+    --ring: 43 74% 49%;
+
+    --radius: 1rem;
+
+    /* Chest piece color - Tomato Red */
+    --chest: 9 100% 64%;
+    --chest-foreground: 0 0% 100%;
+
+    /* Leg piece color - Golden */
+    --leg: 43 74% 49%;
+    --leg-foreground: 25 47% 20%;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(25 47% 27%) 0%, hsl(43 74% 49%) 100%);
+    
+    /* Shadows */
+    --shadow-warm: 0 10px 30px -10px hsl(43 74% 49% / 0.3);
+    --shadow-card: 0 4px 12px hsl(25 47% 27% / 0.1);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+@layer utilities {
+  .bg-gradient-warm {
+    background: linear-gradient(135deg, hsl(25 47% 27%) 0%, hsl(43 74% 49%) 100%);
+  }
+  
+  .shadow-warm {
+    box-shadow: 0 10px 30px -10px hsl(43 74% 49% / 0.3);
+  }
+  
+  .shadow-card {
+    box-shadow: 0 4px 12px hsl(25 47% 27% / 0.1);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
