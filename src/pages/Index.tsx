@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { X, Users, Drumstick } from "lucide-react";
 import { toast } from "sonner";
+import mandiBack from "@/assets/mandi_back.jpg";
+import mandiBack2 from "@/assets/mandi_back2.jpg";
 
 type InputMode = "quarters" | "custom" | "manual";
 type PieceType = "chest" | "leg";
@@ -64,7 +66,7 @@ const Index = () => {
 
   // Handle quarters input change
   const handleQuartersChange = (value: number) => {
-    const numQuarters = Math.max(1, value);
+    const numQuarters = Math.max(0, value);
     setQuarters(numQuarters);
     
     // Update custom quarters array
@@ -175,7 +177,15 @@ const Index = () => {
   const { chestPercent, legPercent } = getWheelSegments();
 
   return (
-    <div className="min-h-screen bg-gradient-warm py-8 px-4">
+    <div 
+      className="min-h-screen bg-gradient-warm py-8 px-4 relative"
+      style={{
+        backgroundImage: `linear-gradient(135deg, rgba(139, 69, 19, 0.85) 0%, rgba(218, 165, 32, 0.85) 100%), url(${mandiBack})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <header className="text-center mb-8 animate-bounce-in">
@@ -228,9 +238,9 @@ const Index = () => {
                   </label>
                   <Input
                     type="number"
-                    min="1"
+                    min="0"
                     value={quarters}
-                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 1)}
+                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 0)}
                     disabled={isSpinning}
                     className="max-w-xs"
                   />
@@ -259,9 +269,9 @@ const Index = () => {
                   </label>
                   <Input
                     type="number"
-                    min="1"
+                    min="0"
                     value={customQuarters.length}
-                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 1)}
+                    onChange={(e) => handleQuartersChange(parseInt(e.target.value) || 0)}
                     disabled={isSpinning}
                     className="max-w-xs"
                   />
