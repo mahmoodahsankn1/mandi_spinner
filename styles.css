@@ -435,7 +435,7 @@ body {
 }
 
 .wheel.spinning {
-    animation: spin-wheel 3s linear;
+    animation: spin-wheel-decelerate 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
 }
 
 .wheel-center {
@@ -630,6 +630,15 @@ body {
 }
 
 @keyframes spin-wheel {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(1800deg);
+    }
+}
+
+@keyframes spin-wheel-decelerate {
     0% {
         transform: rotate(0deg);
     }
