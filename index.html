@@ -1,25 +1,166 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.png" type="image/png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mandi Spinner - Fair Chicken Distribution</title>
-    <meta name="description" content="Fun and fair chicken piece distribution app for Mandi meals - spin the wheel to randomly assign chest and leg pieces to friends" />
-    <meta name="author" content="Mandi Spinner" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fair & Square Chicken Distribution - Mandi Spinner">
+    <title>🍗 Mandi Spinner - Fair Chicken Distribution</title>
+    <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
 
-    <meta property="og:title" content="Mandi Spinner - Fair Chicken Distribution" />
-    <meta property="og:description" content="Fun and fair chicken piece distribution for Mandi meals" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <div class="page-container">
+        <div class="max-w-container">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="title">🍗 Mandi Spinner 🍗</h1>
+                <p class="subtitle">Fair & Square Chicken Distribution</p>
+            </header>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+            <!-- Main Content -->
+            <div class="content-space">
+                <!-- Setup Pieces Card -->
+                <div class="card">
+                    <h2 class="card-title">📝 Setup Pieces</h2>
+                    
+                    <!-- Mode Tabs -->
+                    <div class="mode-tabs">
+                        <button id="btn-custom-mode" class="mode-btn active">Custom Quarters</button>
+                        <button id="btn-manual-mode" class="mode-btn">Manual Mode</button>
+                    </div>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+                    <!-- Custom Quarters Mode -->
+                    <div id="custom-mode-content" class="mode-content">
+                        <div class="input-group">
+                            <label class="input-label">Number of Quarters</label>
+                            <input 
+                                type="number" 
+                                id="quarters-input" 
+                                class="input-field max-w-input" 
+                                min="0" 
+                                value=""
+                                placeholder="0"
+                            >
+                        </div>
+                        <div>
+                            <p class="quarters-label">Click quarters to toggle between Chest and Leg:</p>
+                            <div id="quarters-grid" class="quarters-grid"></div>
+                        </div>
+                        <div class="info-box">
+                            <p id="custom-summary" class="info-text">Your Selection: 0 Chest + 0 Legs</p>
+                        </div>
+                    </div>
+
+                    <!-- Manual Mode -->
+                    <div id="manual-mode-content" class="mode-content hidden">
+                        <div class="manual-grid">
+                            <div>
+                                <label class="input-label">🍗 Chest Pieces</label>
+                                <input 
+                                    type="number" 
+                                    id="chest-input" 
+                                    class="input-field" 
+                                    min="0" 
+                                    value="0"
+                                >
+                            </div>
+                            <div>
+                                <label class="input-label">🍖 Leg Pieces</label>
+                                <input 
+                                    type="number" 
+                                    id="leg-input" 
+                                    class="input-field" 
+                                    min="0" 
+                                    value="0"
+                                >
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p id="manual-summary" class="info-text">Total: 0 pieces (0 Chest + 0 Legs)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- People Management Card -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        Add People
+                    </h2>
+                    <div class="people-input-group">
+                        <input 
+                            type="text" 
+                            id="person-input" 
+                            class="input-field flex-1" 
+                            placeholder="Enter person's name"
+                        >
+                        <button id="btn-add-person" class="btn btn-primary">Add</button>
+                    </div>
+                    <div id="people-list" class="people-list"></div>
+                </div>
+
+                <!-- Spinning Wheel Card -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Spin the Wheel
+                    </h2>
+
+                    <!-- Wheel Visualization -->
+                    <div class="wheel-container">
+                        <div class="wheel-wrapper">
+                            <div id="wheel" class="wheel">
+                                <div class="wheel-center" id="wheel-center">🎯</div>
+                            </div>
+                            <div class="wheel-pointer"></div>
+                        </div>
+
+                        <p id="spinning-text" class="spinning-text hidden">SPINNING...</p>
+
+                        <div id="result-display" class="result-display hidden">
+                            <p id="result-person" class="result-person"></p>
+                            <p id="result-piece" class="result-piece"></p>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-box">
+                        <p id="stats-text" class="stats-text">
+                            <strong>Remaining:</strong> 0 pieces (0 Chest, 0 Legs) | 0 people
+                        </p>
+                        <div class="stats-percentages">
+                            <span id="chest-percent">🍗 Chest: 50%</span>
+                            <span id="leg-percent">🍖 Leg: 50%</span>
+                        </div>
+                    </div>
+
+                    <!-- Spin Button -->
+                    <button id="btn-spin" class="btn btn-primary btn-lg btn-full" disabled>
+                        🎯 SPIN THE WHEEL
+                    </button>
+                </div>
+
+                <!-- Assignments History -->
+                <div id="assignments-card" class="card hidden">
+                    <h2 class="card-title">📋 Assignments</h2>
+                    <div id="assignments-list" class="assignments-list"></div>
+                </div>
+
+                <!-- Reset Button -->
+                <div class="reset-container">
+                    <button id="btn-reset" class="btn btn-destructive">Reset Everything</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
